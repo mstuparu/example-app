@@ -20,7 +20,7 @@ resource "aws_eks_node_group" "example-node" {
   cluster_name    = aws_eks_cluster.example.name
   node_group_name = "example-node"
   node_role_arn   = aws_iam_role.example-node.arn
-  subnet_ids      = ["${aws_default_subnet.default_az1.id}", "${aws_default_subnet.default_az2.id}"]
+  subnet_ids      = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   scaling_config {
     desired_size = 1
     max_size     = 1
@@ -36,10 +36,6 @@ resource "aws_eks_node_group" "example-node" {
   ]
 }
 
-output "endpoint" {
-  value = "${aws_eks_cluster.example.endpoint}"
-}
-
-output "kubeconfig-certificate-authority-data" {
-  value = "${aws_eks_cluster.example.certificate_authority.0.data}"
+output "eks-endpoint" {
+  value = aws_eks_cluster.example.endpoint
 }
