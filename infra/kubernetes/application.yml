@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine-deployment
+  namespace: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redmine
+  template:
+    metadata:
+      labels:
+        app: redmine
+
+    spec:
+      containers:
+        - name: redmine
+          image: redmine:4.1.0
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+            requests:
+              cpu: "0.20"
+              memory: "512Mi"
+          env:
+            - name: REDMINE_DB_POSTGRES
+              valueFrom:
+                secretKeyRef:
+                  name: db-access
+                  key: address
+            - name: REDMINE_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-access
+                  key: username
+            - name: REDMINE_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-access
+                  key: password
